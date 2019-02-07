@@ -14,7 +14,8 @@ pipeline {
     }
   }
   stages {
-    stage('Test') {
+    stage('Tests') {
+    stage('Web Test') {
 agent {
         kubernetes {
           label 'nodejs-testcafe'
@@ -63,7 +64,8 @@ agent {
           sh 'ab -n 10 -c 4 -s 5 http://localhost:8080/'
         }
       }
-    }  
+    }
+    }
     stage('Build and Push Image') {
       agent any
       when {

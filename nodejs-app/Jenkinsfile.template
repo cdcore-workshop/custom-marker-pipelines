@@ -15,6 +15,7 @@ pipeline {
   }
   stages {
     stage('Tests') {
+    parallel {
     stage('Web Test') {
 agent {
         kubernetes {
@@ -64,6 +65,7 @@ agent {
           sh 'ab -n 10 -c 4 -s 5 http://localhost:8080/'
         }
       }
+    }
     }
     }
     stage('Build and Push Image') {

@@ -4,6 +4,11 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr: '2'))
     skipDefaultCheckout true
   }
+  post {
+    aborted {
+      echo "Why didn't you push my button?"
+    }
+  }
   stages {
     stage('Test') {
       agent { label 'nodejs-app' }
@@ -13,27 +18,20 @@ pipeline {
           echo 'Hello World!'   
           sh 'node --version'
         }
-       }
-       post {
+      }
+      post {
         success {
           stash name: 'app', includes: '*.js, public/**, views/*, Dockerfile'
-         }
+        }
       }
     }
     stage('Build and Push Image') {
-      agent any
       when {
          beforeAgent true
          branch 'master'
       }
       steps {
          echo "TODO - build and push image"
-         unstash 'app'
-      }
-      post {
-        success {
-          slackSend "${JOB_NAME} pipeline job is awaiting approval at: ${RUN_DISPLAY_URL}"
-        }
       }
     }
     stage('Deploy') {
@@ -42,15 +40,15 @@ pipeline {
         branch 'master'
       }
       options {
-        timeout(time: 60, unit: 'SECONDS') 
+        timeout(time: 60, unit: 'SECONDS')
       }
       input {
-        message "Should we deploy?"
+        message "Should we continue?"
         submitterParameter "APPROVER"
       }
       steps {
         echo "Continuing with deployment - approved by ${APPROVER}"
       }
-    }   
+    }
   }
 }

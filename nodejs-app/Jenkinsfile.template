@@ -33,10 +33,10 @@ pipeline {
                   env.npmPackages = props['npmPackages']
                 }
                 container('nodejs') {
-                  sh '''
+                  sh """
                     npm i -S ${npmPackages}
                     node ./hello.js &
-                  '''
+                  """
                 }
               }   
             }

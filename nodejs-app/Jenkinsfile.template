@@ -95,9 +95,10 @@ pipeline {
         }
       }
       post {
-/*        success {
+        success {
           // slackSend "${JOB_NAME} pipeline job is awaiting approval at: ${RUN_DISPLAY_URL}"
-        }*/
+          echo "Success of dockerBuildPush step"
+        }
       }
     }
     stage('Deploy') {
